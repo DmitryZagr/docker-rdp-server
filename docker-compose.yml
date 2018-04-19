@@ -2,7 +2,7 @@ version: '3'
 
 services:
   uxrdp-desktop-wo-edt:
-    build: .
+    image: dmitryzagr/docker-rdp-server:0.0.1
     restart: always
     ports:
       - "3388:3389"
