@@ -75,16 +75,19 @@ RUN rm -rf /etc/xrdp/rsakeys.ini /etc/xrdp/*.pem
 
 # Add sample user
 
+RUN addgroup ubuntu && useradd -m  -d /home/ubuntu -s /bin/bash -g ubuntu ubuntu && echo "ubuntu:ubuntu" | /usr/sbin/chpasswd && \
+    echo "ubuntu    ALL=(ALL) ALL" >> /etc/sudoers
+
 RUN sudo apt-get install -y python-software-properties debconf-utils && \
     sudo add-apt-repository -y ppa:webupd8team/java && \
     sudo apt-get update && \
     echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections && \
     sudo apt-get install -y oracle-java8-installer # Docker config
 
-RUN addgroup ubuntu
-RUN useradd -m -s /bin/bash -g ubuntu ubuntu
-RUN echo "ubuntu:ubuntu" | /usr/sbin/chpasswd
-RUN echo "ubuntu    ALL=(ALL) ALL" >> /etc/sudoers
+RUN apt-get install -y xarchiver
+
+RUN cd /home/ubuntu && git clone https://github.com/DmitryZagr/imperialist-competitive-algorithm.git && \
+    chown -R ubuntu:ubuntu imperialist-competitive-algorithm
 
 VOLUME ["/etc/ssh","/home"]
 EXPOSE 3389 22 9001
