@@ -75,12 +75,16 @@ RUN rm -rf /etc/xrdp/rsakeys.ini /etc/xrdp/*.pem
 
 # Add sample user
 
+RUN sudo apt-get install -y python-software-properties debconf-utils && \
+    sudo add-apt-repository -y ppa:webupd8team/java && \
+    sudo apt-get update && \
+    echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections && \
+    sudo apt-get install -y oracle-java8-installer # Docker config
+
 RUN addgroup ubuntu
 RUN useradd -m -s /bin/bash -g ubuntu ubuntu
 RUN echo "ubuntu:ubuntu" | /usr/sbin/chpasswd
 RUN echo "ubuntu    ALL=(ALL) ALL" >> /etc/sudoers
-
-# Docker config
 
 VOLUME ["/etc/ssh","/home"]
 EXPOSE 3389 22 9001
